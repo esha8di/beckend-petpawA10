@@ -59,6 +59,22 @@ async function run() {
 
     })
 
+    //createlist for home 
+    app.post('/createlisthome',async(req,res)=>{
+      const data=req.body;
+      console.log('data',data);
+
+
+      // add real time
+      const date=new Date();
+      data.createdAt=date;
+
+      // sending data to fontend
+      const result=await petServices.insertOne(data);
+      res.send(result);
+
+    })
+
     app.post('/orders', async(req,res)=>{
 
       const data=req.body;
@@ -97,31 +113,31 @@ async function run() {
 });
 
 ///for limit
-// app.get('/createlist', async (req, res) => {
-//   try {
-//     const { category, limit } = req.query;
+app.get('/createlisthome', async (req, res) => {
+  try {
+    const { category, limit } = req.query;
 
-//     let query = {};
-//     if (category && category.trim() !== "") {
+    let query = {};
+    if (category && category.trim() !== "") {
       
-//       query.category = { $regex: new RegExp(`^${category}$`, "i") };
-//     }
+      query.category = { $regex: new RegExp(`^${category}$`, "i") };
+    }
 
-//     const limitNumber = limit && !isNaN(parseInt(limit)) ? parseInt(limit) : 6;
+    const limitNumber = limit && !isNaN(parseInt(limit)) ? parseInt(limit) : 6;
 
-//     const listingsCursor = petServices
-//       .find(query)
-//       .sort({ createdAt: -1 })
-//       .limit(limitNumber);
+    const listingsCursor = petServices
+      .find(query)
+      .sort({ createdAt: -1 })
+      .limit(limitNumber);
 
-//     const listings = await listingsCursor.toArray();
+    const listings = await listingsCursor.toArray();
 
-//     res.status(200).json(listings);
-//   } catch (error) {
-//     console.error("Error fetching listings:", error);
+    res.status(200).json(listings);
+  } catch (error) {
+    console.error("Error fetching listings:", error);
    
-//   }
-// });
+  }
+});
 
 
 
